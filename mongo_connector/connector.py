@@ -375,9 +375,9 @@ class Connector(threading.Thread):
                 return
 
             # Establish a connection to the replica set as a whole
-            self.main_conn.close()
-            self.main_conn = self.create_authed_client(
-                replicaSet=is_master['setName'])
+            # self.main_conn.close()
+            # self.main_conn = self.create_authed_client(
+            #     replicaSet=is_master['setName'])
 
             self.update_version_from_client(self.main_conn)
 
