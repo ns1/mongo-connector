@@ -235,6 +235,11 @@ class OplogThread(threading.Thread):
                             last_ts = entry['ts']
                             continue
 
+                        if 'o' in entry and '$v' in entry['o']:
+                            del entry['o']['$v']
+                        if 'o2' in entry and '$v' in entry['o2']:
+                            del entry['o2']['$v']
+
                         # Sync the current oplog operation
                         operation = entry['op']
                         ns = entry['ns']
