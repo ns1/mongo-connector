@@ -236,11 +236,13 @@ class DocManager(DocManagerBase):
                 bulk_op.execute()
                 meta_bulk_op.execute()
             except pymongo.errors.DuplicateKeyError as e:
-                LOG.warn('Continuing after DuplicateKeyError: '
-                         + str(e))
+                LOG.warn('Continuing after DuplicateKeyError: ' + str(e))
             except pymongo.errors.BulkWriteError as bwe:
-                LOG.error(bwe.details)
-                raise e
+                for writeError in bwe.details['writeErrors']:                    
+                    if int(writeError['code']) != 11000:
+                        raise bwe                        
+                    LOG.warn('Continuing after DuplicateKeyError: ' + str(writeError))
+                pass
 
     @wrap_exceptions
     def remove(self, document_id, namespace, timestamp):
